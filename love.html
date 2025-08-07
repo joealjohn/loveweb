@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Love Letter For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes:wght@400&family=Dancing+Script:wght@400;600&family=Poppins:wght@300;400;500&family=Caveat:wght@400;600&family=Pacifico:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg,
+            #ff4757 0%,
+            #ff3742 15%,
+            #ff6b7a 30%,
+            #c44569 45%,
+            #8e2447 60%,
+            #a4394f 75%,
+            #ff6348 90%,
+            #d63384 100%);
+            background-size: 400% 400%;
+            animation: redGradient 12s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: none;
+        }
+
+        /* Custom Rose Cursor */
+        .rose-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            font-size: 1.5rem;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1rem;
+            opacity: 0;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* Night Mode Glow */
+        .night-mode {
+            filter: brightness(0.8) contrast(1.2);
+        }
+
+        .night-mode .floating-rose {
+            text-shadow: 0 0 15px currentColor;
+            animation: neonGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 15px currentColor; }
+            to { text-shadow: 0 0 25px currentColor, 0 0 35px currentColor; }
+        }
+
+        @keyframes redGradient {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Weather Effects */
+        .rainy .floating-rose {
+            animation-duration: 6s !important;
+        }
+
+        .rainy::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Glass Morphism Effects */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+            #ff4757 0%,
+            #ff3742 25%,
+            #c44569 50%,
+            #8e2447 75%,
+            #ff6348 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            animation: loadingGlow 2s ease-in-out infinite alternate;
+        }
+
+        .time-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @keyframes loadingGlow {
+            from { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+            to { text-shadow: 0 0 50px rgba(255, 255, 255, 1), 0 0 70px rgba(255, 71, 87, 0.6); }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-left: 5px solid #fff;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.5s ease-out;
+            z-index: 10;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.9);
+            animation: titleGlow 4s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 3rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        .time-based-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 40px rgba(255, 255, 255, 0.9); }
+            to { text-shadow: 0 0 60px rgba(255, 255, 255, 1), 0 0 80px rgba(255, 71, 87, 0.8); }
+        }
+
+        /* Envelope Styles */
+        .envelope-container {
+            position: relative;
+            margin: 2rem auto;
+            cursor: pointer;
+        }
+
+        .envelope {
+            width: 320px;
+            height: 220px;
+            background: linear-gradient(135deg, #fff 0%, #ffe5e8 50%, #ffcdd2 100%);
+            border: 4px solid #ff1744;
+            border-radius: 15px;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease;
+        }
+
+        .envelope:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            height: 110px;
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 50%, #c44569 100%);
+            border: 4px solid #ff1744;
+            border-bottom: none;
+            clip-path: polygon(0 0, 100% 0, 50% 75%);
+            transition: transform 1s ease;
+            transform-origin: 50% 0%;
+            z-index: 2;
+        }
+
+        .envelope.opening .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            color: #d50000;
+            z-index: 1;
+            animation: heartBeat 2.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 50%, 100% { transform: translate(-50%, -50%) scale(1); }
+            25%, 75% { transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        /* Full Screen Letter Overlay with Glass Effect */
+        .letter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s ease;
+        }
+
+        .letter-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .full-letter {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 25px;
+            padding: 3.5rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            transform: scale(0.6) rotateY(90deg);
+            transition: all 0.8s ease;
+            position: relative;
+        }
+
+        .letter-overlay.show .full-letter {
+            transform: scale(1) rotateY(0deg);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            color: white;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: linear-gradient(135deg, #ff3742, #c44569);
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid rgba(255, 23, 68, 0.3);
+            padding-bottom: 1.5rem;
+        }
+
+        .letter-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #8e2447;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(142, 36, 71, 0.3);
+        }
+
+        .letter-date {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #c44569;
+            margin-bottom: 0.5rem;
+        }
+
+        .letter-location {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: #a0306e;
+            font-style: italic;
+        }
+
+        .love-message-full {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #8e2447;
+            line-height: 1.9;
+            text-align: left;
+            margin-bottom: 2.5rem;
+            text-indent: 2rem;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #d63384;
+            margin-top: 2.5rem;
+            border-top: 1px solid rgba(255, 23, 68, 0.3);
+            padding-top: 1.5rem;
+        }
+
+        .romantic-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            color: #8e2447;
+            font-style: italic;
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), rgba(196, 69, 105, 0.15));
+            border-radius: 15px;
+            border-left: 5px solid #ff4757;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.1);
+        }
+
+        .quote-author {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #8e2447;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .button-container {
+            margin-top: 3.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 3.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-open {
+            background: linear-gradient(135deg, #ff4757, #ff3742, #c44569);
+            color: white;
+            border: 2px solid rgba(255, 71, 87, 0.5);
+        }
+
+        .btn-open:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ff3742, #c44569, #8e2447);
+        }
+
+        .btn-trash {
+            background: linear-gradient(135deg, #a8edea, #fed6e3, #ffe5e8);
+            color: #666;
+            transition: all 0.2s ease;
+            border: 2px solid rgba(168, 237, 234, 0.5);
+        }
+
+        .btn-trash:hover {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-rose {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatUp 10s linear infinite;
+        }
+
+        .golden-rose {
+            color: #ffd700 !important;
+            text-shadow: 0 0 20px #ffd700;
+            animation: goldGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes goldGlow {
+            from { text-shadow: 0 0 20px #ffd700; }
+            to { text-shadow: 0 0 30px #ffd700, 0 0 40px #ffd700; }
+        }
+
+        /* Constellation Effect */
+        .constellation-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.5), transparent);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .constellation-line.visible {
+            opacity: 1;
+        }
+
+        @keyframes floatUp {
+            0% {
+                bottom: -10%;
+                transform: translateX(0px) rotate(0deg) rotateZ(0deg);
+                opacity: 1;
+            }
+            25% {
+                transform: translateX(20px) rotate(90deg) rotateZ(90deg);
+            }
+            50% {
+                transform: translateX(-15px) rotate(180deg) rotateZ(180deg);
+            }
+            75% {
+                transform: translateX(10px) rotate(270deg) rotateZ(270deg);
+            }
+            100% {
+                bottom: 110%;
+                transform: translateX(-10px) rotate(360deg) rotateZ(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hidden state for envelope and buttons */
+        .hidden-content {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        .hidden-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Additional romantic elements */
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 1.2rem;
+            animation: sparkle 2.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+        }
+
+        /* Rose petals animation */
+        .rose-petal {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ff4757, #d50000);
+            border-radius: 50% 0;
+            animation: fallPetals 8s linear infinite;
+        }
+
+        @keyframes fallPetals {
+            0% {
+                top: -10px;
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                transform: rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .rose-cursor {
+                display: none;
+            }
+
+            .title {
+                font-size: 3rem;
+            }
+
+            .envelope {
+                width: 280px;
+                height: 190px;
+            }
+
+            .button-container {
+                gap: 2.5rem;
+            }
+
+            .btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .full-letter {
+                padding: 2.5rem;
+                margin: 1rem;
+            }
+
+            .letter-title {
+                font-size: 2.5rem;
+            }
+
+            .love-message-full {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .envelope {
+                width: 240px;
+                height: 160px;
+            }
+
+            .full-letter {
+                padding: 2rem;
+            }
+
+            .letter-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Custom Rose Cursor -->
+<div class="rose-cursor" id="roseCursor">🌹</div>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">Collecting Love...</div>
+    <div class="time-message" id="timeMessage"></div>
+    <div class="loading-spinner"></div>
+</div>
+
+<!-- Letter Overlay -->
+<div class="letter-overlay" id="letterOverlay">
+    <div class="full-letter glass-effect">
+        <button class="close-btn" id="closeBtn">×</button>
+        <div class="letter-header">
+            <h2 class="letter-title">My Dearest Love 💕</h2>
+            <div class="letter-date">Friday, August 8th, 2025 - 9:00 AM</div>
+            <div class="letter-location">Written with all my heart ✨</div>
+        </div>
+
+        <div class="love-message-full">
+            Hey babe, I love you so much. There are many things that will take time for me to change. I'm changing slowly, and you coming into my life was sudden — I still admire it.
+            <br><br>
+            Every moment with you feels like a beautiful dream that I never want to wake up from. Your smile lights up my world, and your laugh is the sweetest melody I've ever heard.
+            <br><br>
+            I know I'm not perfect, and there are parts of me that need work. But with you by my side, I feel motivated to become the best version of myself. You bring out something in me that I didn't even know existed.
+            <br><br>
+            I promise to love you more each day, to grow with you, and to cherish every moment we share together. You make everything in my life brighter and more meaningful.
+        </div>
+
+        <div class="romantic-quote">
+            "Being deeply loved by someone gives you strength, while loving someone deeply gives you courage."
+            <div class="quote-author">- Lao Tzu</div>
+        </div>
+
+        <div class="letter-signature">
+            Forever yours,<br>
+            Joe
+        </div>
+    </div>
+</div>
+
+<!-- Floating Elements Background -->
+<div class="floating-elements" id="floatingElements"></div>
+
+<!-- Main Content -->
+<div class="container" id="mainContainer">
+    <h1 class="title">You've Got Mail ❤️</h1>
+    <p class="subtitle">A special message written just for you</p>
+    <div class="time-based-message" id="timeBasedMessage"></div>
+
+    <div class="hidden-content" id="envelopeSection">
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-heart">💌</div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="btn btn-open" id="openBtn">Open My Heart 💝</button>
+            <button class="btn btn-trash" id="trashBtn">Throw Away 🗑️</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global variables
+    let isNightMode = true; // 11:13 PM is night time
+    let isRainy = Math.random() > 0.7; // 30% chance of rain
+
+    // Device detection
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // Initialize
+    window.addEventListener('load', function() {
+        setupTimeBasedGreeting();
+        setupCursor();
+        setupMobileFeatures();
+        checkWeather();
+
+        setTimeout(() => {
+            startMainSequence();
+        }, 3500);
+    });
+
+    // Time-based greeting system (11:13 PM = night time)
+    function setupTimeBasedGreeting() {
+        let timeMessage = "Good Mrng, my darling! 🌅";
+        let mainTimeMessage = "I'm sending you all my love";
+
+        // Apply night mode since it's 11:13 PM
+        document.body.classList.add('night-mode');
+
+        document.getElementById('timeMessage').textContent = timeMessage;
+        document.getElementById('timeBasedMessage').textContent = mainTimeMessage;
+    }
+
+    // Custom cursor system
+    function setupCursor() {
+        if (isMobile) return;
+
+        const cursor = document.getElementById('roseCursor');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 15 + 'px';
+            cursor.style.top = e.clientY - 15 + 'px';
+
+            // Create trail
+            if (Math.random() > 0.7) {
+                createCursorTrail(e.clientX, e.clientY);
+            }
+        });
+
+        function createCursorTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.textContent = ['💕', '✨', '💖'][Math.floor(Math.random() * 3)];
+            trail.style.left = x - 10 + 'px';
+            trail.style.top = y - 10 + 'px';
+            document.body.appendChild(trail);
+
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 800);
+        }
+    }
+
+    // Mobile features
+    function setupMobileFeatures() {
+        if (!isMobile) return;
+
+        // Shake to open letter
+        let shakeThreshold = 15;
+        let lastUpdate = 0;
+        let lastX = lastY = lastZ = 0;
+
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', (e) => {
+                const current = new Date().getTime();
+                if ((current - lastUpdate) > 100) {
+                    const diffTime = current - lastUpdate;
+                    lastUpdate = current;
+
+                    const acceleration = e.accelerationIncludingGravity;
+                    const x = acceleration.x;
+                    const y = acceleration.y;
+                    const z = acceleration.z;
+
+                    const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+
+                    if (speed > shakeThreshold) {
+                        if (!document.getElementById('letterOverlay').classList.contains('show')) {
+                            vibrate();
+                            document.getElementById('openBtn').click();
+                        }
+                    }
+
+                    lastX = x;
+                    lastY = y;
+                    lastZ = z;
+                }
+            }, false);
+        }
+
+        // Touch swipe gestures
+        let startY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const endY = e.changedTouches[0].clientY;
+            const diff = startY - endY;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0 && !document.getElementById('letterOverlay').classList.contains('show')) {
+                    // Swipe up - open letter
+                    document.getElementById('openBtn').click();
+                } else if (diff < 0 && document.getElementById('letterOverlay').classList.contains('show')) {
+                    // Swipe down - close letter
+                    document.getElementById('closeBtn').click();
+                }
+            }
+        });
+    }
+
+    // Vibration feedback
+    function vibrate(pattern = [100, 50, 100]) {
+        if (navigator.vibrate) {
+            navigator.vibrate(pattern);
+        }
+    }
+
+    // Weather system
+    function checkWeather() {
+        if (isRainy) {
+            document.body.classList.add('rainy');
+            console.log('🌧️ It\'s raining roses tonight!');
+        }
+    }
+
+    // Main sequence
+    function startMainSequence() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContainer = document.getElementById('mainContainer');
+        const envelopeSection = document.getElementById('envelopeSection');
+
+        // Hide loading screen
+        loadingScreen.classList.add('hidden');
+
+        // Show main content
+        setTimeout(() => {
+            mainContainer.classList.add('visible');
+            setTimeout(() => {
+                envelopeSection.classList.add('show');
+            }, 700);
+        }, 600);
+
+        // Start floating elements
+        createFloatingElements();
+        createRosePetals();
+    }
+
+    // ONLY roses and rose petals - NO hearts or stars!
+    function createFloatingElements() {
+        const elementsContainer = document.getElementById('floatingElements');
+
+        // White and red roses ONLY
+
+        // Create roses ONLY
+        setInterval(() => {
+            const rose = document.createElement('div');
+            rose.className = 'floating-rose';
+
+            // Chance for golden rose (1% chance)
+            if (Math.random() < 0.01) {
+                rose.classList.add('golden-rose');
+                rose.textContent = '🌹✨';
+            } else {
+                const isWhite = Math.random() > 0.5;
+                rose.textContent = isWhite ?
+                    whiteRoses[Math.floor(Math.random() * whiteRoses.length)] :
+                    redRoses[Math.floor(Math.random() * redRoses.length)];
+            }
+
+            rose.style.left = Math.random() * 100 + '%';
+            rose.style.animationDuration = (Math.random() * 4 + 8) + 's';
+            rose.style.fontSize = (Math.random() * 1 + 1.5) + 'rem';
+
+            elementsContainer.appendChild(rose);
+
+            setTimeout(() => {
+                if (rose.parentNode) {
+                    rose.parentNode.removeChild(rose);
+                }
+            }, 12000);
+        }, isRainy ? 800 : 1200);
+
+        // Constellation effect between roses
+        if (!isMobile) {
+            setInterval(() => {
+                createConstellations();
+            }, 2000);
+        }
+    }
+
+    // Constellation effect
+    function createConstellations() {
+        const roses = document.querySelectorAll('.floating-rose');
+        const lines = [];
+
+        for (let i = 0; i < roses.length; i++) {
+            for (let j = i + 1; j < roses.length; j++) {
+                const rose1 = roses[i];
+                const rose2 = roses[j];
+
+                if (!rose1 || !rose2) continue;
+
+                const rect1 = rose1.getBoundingClientRect();
+                const rect2 = rose2.getBoundingClientRect();
+
+                const distance = Math.sqrt(
+                    Math.pow(rect2.left - rect1.left, 2) +
+                    Math.pow(rect2.top - rect1.top, 2)
+                );
+
+                if (distance < 150) {
+                    const line = document.createElement('div');
+                    line.className = 'constellation-line visible';
+
+                    const angle = Math.atan2(rect2.top - rect1.top, rect2.left - rect1.left);
+                    line.style.width = distance + 'px';
+                    line.style.left = rect1.left + rect1.width / 2 + 'px';
+                    line.style.top = rect1.top + rect1.height / 2 + 'px';
+                    line.style.transform = `rotate(${angle}rad)`;
+                    line.style.transformOrigin = '0 50%';
+
+                    document.body.appendChild(line);
+                    lines.push(line);
+
+                    setTimeout(() => {
+                        if (line.parentNode) {
+                            line.parentNode.removeChild(line);
+                        }
+                    }, 1000);
+                }
+            }
+        }
+    }
+
+    // Enhanced rose petals with red gradients
+    function createRosePetals() {
+        const elementsContainer = document.getElementById('floatingElements');
+
+        setInterval(() => {
+            const petal = document.createElement('div');
+            petal.className = 'rose-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            petal.style.animationDelay = Math.random() * 2 + 's';
+
+            // Red spectrum colors for petals
+            const colors = [
+                'radial-gradient(circle, #ff4757, #d50000)',
+                'radial-gradient(circle, #ff3742, #c44569)',
+                'radial-gradient(circle, #fff, #ffcdd2)',
+                'radial-gradient(circle, #ff6b7a, #8e2447)',
+                'radial-gradient(circle, #ffd700, #ff8c00)' // Golden petals occasionally
+            ];
+            petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            elementsContainer.appendChild(petal);
+
+            setTimeout(() => {
+                if (petal.parentNode) {
+                    petal.parentNode.removeChild(petal);
+                }
+            }, 10000);
+        }, isRainy ? 400 : 600);
+    }
+
+    // Enhanced sparkle effects
+    function createSparkles(element) {
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = '✨';
+                sparkle.style.left = Math.random() * element.offsetWidth + 'px';
+                sparkle.style.top = Math.random() * element.offsetHeight + 'px';
+                element.appendChild(sparkle);
+
+                setTimeout(() => {
+                    if (sparkle.parentNode) {
+                        sparkle.parentNode.removeChild(sparkle);
+                    }
+                }, 2500);
+            }, i * 100);
+        }
+    }
+
+    // Enhanced envelope opening and letter display
+    document.getElementById('openBtn').addEventListener('click', function() {
+        const envelope = document.getElementById('envelope');
+        const letterOverlay = document.getElementById('letterOverlay');
+
+        // Add enhanced sparkle effect
+        createSparkles(envelope);
+
+        // Vibrate on mobile
+        if (isMobile) {
+            vibrate([100, 50, 100]);
+        }
+
+        // Open envelope animation
+        envelope.classList.add('opening');
+
+        // Show full-screen letter after a short delay
+        setTimeout(() => {
+            letterOverlay.classList.add('show');
+        }, 1000);
+
+        // Hide buttons after opening
+        setTimeout(() => {
+            document.querySelector('.button-container').style.opacity = '0';
+            document.querySelector('.button-container').style.transform = 'translateY(30px)';
+        }, 1200);
+    });
+
+    // Close letter overlay
+    document.getElementById('closeBtn').addEventListener('click', function() {
+        const letterOverlay = document.getElementById('letterOverlay');
+        letterOverlay.classList.remove('show');
+
+        if (isMobile) {
+            vibrate([50]);
+        }
+
+        // Show buttons again
+        setTimeout(() => {
+            document.querySelector('.button-container').style.opacity = '1';
+            document.querySelector('.button-container').style.transform = 'translateY(0)';
+        }, 600);
+    });
+
+    // Close on overlay click
+    document.getElementById('letterOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('show');
+            setTimeout(() => {
+                document.querySelector('.button-container').style.opacity = '1';
+                document.querySelector('.button-container').style.transform = 'translateY(0)';
+            }, 600);
+        }
+    });
+
+    // Simplified trash button dodge functionality (ONLY on click, not hover)
+    const trashBtn = document.getElementById('trashBtn');
+    let dodgeCount = 0;
+    const maxDodges = 6;
+
+    function dodgeButton() {
+        if (dodgeCount >= maxDodges) {
+            trashBtn.textContent = "You Win! Love Can't Be Thrown Away! 😅💕";
+            trashBtn.style.background = "linear-gradient(135deg, #ff6b6b, #feca57)";
+            trashBtn.style.color = "white";
+            return;
+        }
+
+        const container = document.querySelector('.button-container');
+        const containerRect = container.getBoundingClientRect();
+        const btnRect = trashBtn.getBoundingClientRect();
+
+        const maxX = containerRect.width - btnRect.width;
+        const maxY = containerRect.height - btnRect.height;
+
+        const newX = Math.random() * Math.min(maxX, 250) - 125;
+        const newY = Math.random() * Math.min(maxY, 120) - 60;
+
+        trashBtn.style.transform = `translate(${newX}px, ${newY}px) rotate(${Math.random() * 360}deg)`;
+
+        const playfulTexts = [
+            "Not Tonight! ❤️",
+            "Love Always Wins! 💕",
+            "Try Harder! 😜",
+            "Never Giving Up! 🌹",
+            "Love is Eternal! ❤️",
+            "Almost There! 😂"
+        ];
+        trashBtn.textContent = playfulTexts[dodgeCount];
+
+        // Vibrate on mobile
+        if (isMobile) {
+            vibrate([30]);
+        }
+
+        dodgeCount++;
+    }
+
+    // Event listeners for trash button (ONLY click and touch, no hover/mouseenter)
+    trashBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (dodgeCount >= maxDodges) {
+            if (isMobile) {
+                vibrate([200, 100, 200]);
+            }
+            alert("You caught me! 💕 This love letter can never be thrown away! Our love is stronger than anything! ❤️🌹");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            dodgeButton();
+        }
+    });
+
+    trashBtn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        if (dodgeCount < maxDodges) {
+            dodgeButton();
+        }
+    });
+
+    trashBtn.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        if (dodgeCount < maxDodges) {
+            dodgeButton();
+        }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.getElementById('letterOverlay').classList.remove('show');
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+            if (!document.getElementById('letterOverlay').classList.contains('show')) {
+                document.getElementById('openBtn').click();
+            }
+        }
+    });
+</script>
+</body>
+</html>
