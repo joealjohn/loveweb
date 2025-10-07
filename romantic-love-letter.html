@@ -1140,19 +1140,21 @@
     // Music state
     let isPlaying = false;
 
-    // Open Envelope and Show Letter
-    function openEnvelope() {
-        breakSeal();
-        openButton.classList.add('hidden');
-
-        // Start music when envelope opens
+    // Function to start music
+    function startMusic() {
         bgMusic.play().then(() => {
             isPlaying = true;
             musicToggle.textContent = '🎶';
             musicToggle.classList.add('playing');
         }).catch(error => {
-            console.log('Auto-play prevented. User can click music button.');
+            console.log('Music play error:', error);
         });
+    }
+
+    // Open Envelope and Show Letter
+    function openEnvelope() {
+        breakSeal();
+        openButton.classList.add('hidden');
 
         setTimeout(() => {
             envelopeWrapper.classList.add('opening');
@@ -1163,7 +1165,12 @@
 
             setTimeout(() => {
                 letterCard.classList.add('show');
-                startTypewriter();
+
+                // START MUSIC RIGHT BEFORE TYPEWRITER STARTS
+                setTimeout(() => {
+                    startMusic();
+                    startTypewriter();
+                }, 1000);
             }, 600);
         }, config.animations.letterShowDelay);
     }
@@ -1192,7 +1199,7 @@
             }
         };
 
-        setTimeout(type, 1000);
+        type();
     }
 
     // Initialize App
