@@ -1,0 +1,17 @@
+{
+  "letter": {
+    "defaultText": "Like the aurora dancing across the night sky, you illuminate my darkest moments with colors I never knew existed. Your presence is the magic that transforms the ordinary into extraordinary, painting my world with wonder and light. Just as the northern lights captivate all who witness them, you've captured my heart completely. In the vast universe of possibilities, finding you feels like witnessing the most beautiful aurora—rare, breathtaking, and absolutely mesmerizing. Forever enchanted by you. 💜✨",
+    "recipient": "To My Aurora",
+    "sender": "Forever Yours"
+  },
+  "music": {
+    "url": "https://www.dropbox.com/scl/fi/cgqz9nv9j19e7nfhlvumk/Sun-Saathiya-Maahiya-Slowed-Reverb-ABCD-2-Priya-Saraiya-Divya-Kumar-Srk-Lofi-World.mp3?rlkey=7juzokvjxc85b5q6d0s1iwk69&dl=1",
+    "autoplay": true,
+    "volume": 0.6
+  },
+  "animations": {
+    "typewriterSpeed": 30,
+    "envelopeOpenDelay": 900,
+    "letterShowDelay": 2300
+  }
+}
